@@ -9,7 +9,11 @@ import '../services/pdf_rasterizer.dart';
 import '../widgets/mockup_view.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.initialPages, this.initialFileName});
+
+  /// 데모/테스트에서 업로드 단계를 건너뛰고 바로 편집 화면을 띄우기 위한 주입용.
+  final List<RenderedPage>? initialPages;
+  final String? initialFileName;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -23,6 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _exporting = false;
   String? _error;
   String? _fileName;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialPages != null) {
+      _pages = widget.initialPages!;
+      _fileName = widget.initialFileName;
+    }
+  }
 
   Future<void> _pickPdf() async {
     setState(() => _error = null);
